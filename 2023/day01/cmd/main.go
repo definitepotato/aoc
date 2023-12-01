@@ -25,31 +25,24 @@ func IsNum(x string) (int, bool) {
 	return num, true
 }
 
-func SeekFromLeft(s string) string {
+func Seek(s string) (string, string) {
+	var all []string
+
 	for i := 0; i < len(s); i++ {
 		c := string(s[i])
 
 		if _, n := IsNum(c); n {
-			return c
+			all = append(all, c)
 		}
 	}
 
-	return ""
+	first := all[0]
+	last := all[len(all)-1]
+
+	return first, last
 }
 
-func SeekFromRight(s string) string {
-	for i := len(s) - 1; i >= 0; i-- {
-		c := string(s[i])
-
-		if _, n := IsNum(c); n {
-			return c
-		}
-	}
-
-	return ""
-}
-
-func SeekWordsAsNum(s string) (string, string) {
+func SeekWithWords(s string) (string, string) {
 	n := []string{}
 
 	for i := 0; i < len(s); i++ {
@@ -154,10 +147,9 @@ func main() {
 	var sumPt1 int
 	calibrationsPt1 := []int{}
 	for _, row := range input {
-		left := SeekFromLeft(row)
-		right := SeekFromRight(row)
+		first, last := Seek(row)
 
-		n, _ := stoi(left + right)
+		n, _ := stoi(first + last)
 		calibrationsPt1 = append(calibrationsPt1, n)
 	}
 
@@ -170,10 +162,9 @@ func main() {
 	var sumPt2 int
 	calibrationsPt2 := []int{}
 	for _, row := range input {
-		first, last := SeekWordsAsNum(row)
+		first, last := SeekWithWords(row)
 
 		if last == "0" {
-			fmt.Println(last)
 			n, _ := stoi(first + first)
 			calibrationsPt2 = append(calibrationsPt2, n)
 		} else {

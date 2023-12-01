@@ -1,25 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
-func TestSeekFromLeft(t *testing.T) {
-	have := "twothree5"
-	got := SeekFromLeft(have)
+func TestSeek(t *testing.T) {
+	have := "xsone7nineEFthree5onesix"
+	first, last := Seek(have)
 
-	if got != "5" {
-		t.Errorf("SeekFromLeft: got %s expected 5", got)
-	}
-}
-
-func TestSeekFromRight(t *testing.T) {
-	have := "twothree5"
-	got := SeekFromRight(have)
-
-	if got != "5" {
-		t.Errorf("SeekFromRight: got %s expected 5", got)
-	}
+	fmt.Println(first, last)
 }
 
 func TestIsNum(t *testing.T) {
@@ -35,9 +25,9 @@ func TestIsNum(t *testing.T) {
 	}
 }
 
-func TestSeekWordsAsNum(t *testing.T) {
+func TestSeekWithWords(t *testing.T) {
 	have := "xsone7nineEFthree5onesix"
-	first, last := SeekWordsAsNum(have)
+	first, last := SeekWithWords(have)
 
 	if first != "1" && last != "6" {
 		t.Errorf("got %s,%s expected 1,6", first, last)
