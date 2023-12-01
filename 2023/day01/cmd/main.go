@@ -131,11 +131,7 @@ func SeekWithWords(s string) (string, string) {
 	}
 
 	first := n[0]
-	last := "0"
-
-	if len(n) > 1 {
-		last = n[len(n)-1]
-	}
+	last := n[len(n)-1]
 
 	return first, last
 }
@@ -164,13 +160,8 @@ func main() {
 	for _, row := range input {
 		first, last := SeekWithWords(row)
 
-		if last == "0" {
-			n, _ := stoi(first + first)
-			calibrationsPt2 = append(calibrationsPt2, n)
-		} else {
-			n, _ := stoi(first + last)
-			calibrationsPt2 = append(calibrationsPt2, n)
-		}
+		n, _ := stoi(first + last)
+		calibrationsPt2 = append(calibrationsPt2, n)
 	}
 
 	for i := 0; i < len(calibrationsPt2); i++ {
