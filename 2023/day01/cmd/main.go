@@ -152,7 +152,7 @@ func main() {
 	for i := 0; i < len(calibrationsPt1); i++ {
 		sumPt1 += calibrationsPt1[i]
 	}
-	fmt.Println(sumPt1)
+	fmt.Println("Part 1: ", sumPt1)
 
 	// Part 2.
 	var sumPt2 int
@@ -167,5 +167,5 @@ func main() {
 	for i := 0; i < len(calibrationsPt2); i++ {
 		sumPt2 += calibrationsPt2[i]
 	}
-	fmt.Println(sumPt2)
+	fmt.Println("Part 2: ", sumPt2)
 }

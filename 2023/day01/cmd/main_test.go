@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -9,7 +8,9 @@ func TestSeek(t *testing.T) {
 	have := "xsone7nineEFthree5onesix"
 	first, last := Seek(have)
 
-	fmt.Println(first, last)
+	if first != "7" && last != "5" {
+		t.Errorf("got %s,%s expected 7,5", first, last)
+	}
 }
 
 func TestIsNum(t *testing.T) {
