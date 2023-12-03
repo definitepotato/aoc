@@ -45,6 +45,28 @@ func (game *Game) IsPossible() bool {
 	return true
 }
 
+func (game *Game) GetPower() int {
+	red, blue, green := 0, 0, 0
+
+	for _, set := range game.Set {
+
+		if set.Red > red {
+			red = set.Red
+		}
+
+		if set.Blue > blue {
+			blue = set.Blue
+		}
+
+		if set.Green > green {
+			green = set.Green
+		}
+	}
+
+	power := red * blue * green
+	return power
+}
+
 func GetGameId(game string) int {
 	gameTitle := strings.Split(game, ":")[0]
 	gameNumber := strings.Split(gameTitle, " ")[1]
@@ -93,13 +115,15 @@ func NewSet(game string) []Set {
 func main() {
 	input := helpers.ReadFile("input.txt")
 
-	// Part 1.
 	sum := 0
+	power := 0
 	for _, game := range input {
 		g := NewGame(game)
+		power += g.GetPower()
 		if g.IsPossible() {
 			sum += g.Id
 		}
 	}
-	fmt.Println(sum)
+	fmt.Println("Part 1: ", sum)
+	fmt.Println("Part 2:", power)
 }

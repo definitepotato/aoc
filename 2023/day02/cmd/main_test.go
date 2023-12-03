@@ -40,3 +40,12 @@ func TestIsPossible(t *testing.T) {
 		t.Errorf("got %t expected false", happyPossible)
 	}
 }
+
+func TestGetPower(t *testing.T) {
+	got := NewGame(GOOD_GAME)
+	power := got.GetPower()
+
+	if power != 48 {
+		t.Errorf("got %d expected 48", power)
+	}
+}
