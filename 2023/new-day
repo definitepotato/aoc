@@ -42,6 +42,13 @@ func main() {
 }
 EOL
 
+cat >$1/cmd/main_test.go <<EOL
+package main
+EOL
+
+touch $1/input.txt
+touch $1/test.txt
+
 cd $1 && go mod init $1 && go mod tidy
 
 echo "" >>go.mod
