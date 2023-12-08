@@ -3,23 +3,22 @@ package main
 import (
 	"fmt"
 	"helpers"
-	"log"
 	"strings"
 )
 
 type Nodes struct {
-	Nodes []*Node
+	Node map[string]Node
 }
 
 type Node struct {
+	Name  string
 	Left  string
 	Right string
-	Name  string
 }
 
-func NewNode(nodes string) *Node {
+func NewNode(nodes string) Node {
 	t := strings.Split(nodes, "=")
-	mainNode := strings.TrimSpace(t[0])
+	name := strings.TrimSpace(t[0])
 
 	tl := strings.Split(t[1], ",")[0]
 	tl = strings.Replace(tl, "(", "", 1)
@@ -29,30 +28,36 @@ func NewNode(nodes string) *Node {
 	tr = strings.Replace(tr, ")", "", 1)
 	rightNode := strings.TrimSpace(tr)
 
-	return &Node{
-		Name:  mainNode,
+	return Node{
+		Name:  name,
 		Left:  leftNode,
 		Right: rightNode,
 	}
 }
 
+func GetFirstNodeName(nodes []string) string {
+	t := strings.Split(nodes[2], "=")
+	parent := strings.TrimSpace(t[0])
+
+	return parent
+}
+
 func MakeNodes(nodes []string) *Nodes {
-	n := &Nodes{}
+	n := &Nodes{
+		Node: make(map[string]Node),
+	}
 	for i := 2; i < len(nodes); i++ {
-		n.Nodes = append(n.Nodes, NewNode(nodes[i]))
+		t := strings.Split(nodes[i], "=")
+		parent := strings.TrimSpace(t[0])
+
+		n.Node[parent] = NewNode(nodes[i])
 	}
 
 	return n
 }
 
-func (n *Nodes) FindNode(seeker string) (*Node, error) {
-	for _, node := range n.Nodes {
-		if node.Name == seeker {
-			return node, nil
-		}
-	}
-
-	return nil, fmt.Errorf("node not found: {%s}", seeker)
+func (n *Nodes) FindNode(seeker string) Node {
+	return n.Node[seeker]
 }
 
 func main() {
@@ -62,31 +67,22 @@ func main() {
 	instructions := strings.Split(ti, "")
 
 	nodes := MakeNodes(input)
-	current := nodes.Nodes[0]
+	start := GetFirstNodeName(input)
+	current := nodes.FindNode(start)
 
 	steps := 0
 	for i := 0; i < len(instructions); i++ {
 		if current.Name == "ZZZ" {
-			fmt.Printf("Found ZZZ! It took {%d} steps\n", steps)
+			fmt.Printf("Found ZZZ in {%d} steps!\n", steps)
 			break
 		}
 
 		if instructions[i] == "L" {
-			next, err := nodes.FindNode(current.Left)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			current = next
+			current = nodes.FindNode(current.Left)
 		}
 
 		if instructions[i] == "R" {
-			next, err := nodes.FindNode(current.Right)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			current = next
+			current = nodes.FindNode(current.Right)
 		}
 
 		steps += 1
