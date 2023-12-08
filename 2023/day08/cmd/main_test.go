@@ -36,18 +36,6 @@ func TestMakeNodes(t *testing.T) {
 	})
 }
 
-func TestGetFirstNodeName(t *testing.T) {
-	t.Run("Find the initial node starting point", func(t *testing.T) {
-		have := helpers.ReadFile("../test.txt")
-		got := GetFirstNodeName(have)
-		want := "AAA"
-
-		if got != want {
-			t.Errorf("got {%s}, wanted {%s}", got, want)
-		}
-	})
-}
-
 func TestFindNode(t *testing.T) {
 	t.Run("Find node in nodes", func(t *testing.T) {
 		input := helpers.ReadFile("../test.txt")

@@ -35,13 +35,6 @@ func NewNode(nodes string) Node {
 	}
 }
 
-func GetFirstNodeName(nodes []string) string {
-	t := strings.Split(nodes[2], "=")
-	parent := strings.TrimSpace(t[0])
-
-	return parent
-}
-
 func MakeNodes(nodes []string) *Nodes {
 	n := &Nodes{
 		Node: make(map[string]Node),
@@ -67,8 +60,7 @@ func main() {
 	instructions := strings.Split(ti, "")
 
 	nodes := MakeNodes(input)
-	start := GetFirstNodeName(input)
-	current := nodes.FindNode(start)
+	current := nodes.FindNode("AAA")
 
 	steps := 0
 	for i := 0; i < len(instructions); i++ {
