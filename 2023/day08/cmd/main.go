@@ -35,6 +35,17 @@ func NewNode(nodes string) Node {
 	}
 }
 
+func (n *Nodes) FindStartingNodes() []Node {
+	nodes := []Node{}
+	for _, node := range n.Node {
+		if node.Name[2] == 'Z' {
+			nodes = append(nodes, node)
+		}
+	}
+
+	return nodes
+}
+
 func MakeNodes(nodes []string) *Nodes {
 	n := &Nodes{
 		Node: make(map[string]Node),
@@ -55,14 +66,13 @@ func (n *Nodes) FindNode(seeker string) Node {
 
 func main() {
 	input := helpers.ReadFile("input.txt")
-
 	ti := input[0]
 	instructions := strings.Split(ti, "")
-
 	nodes := MakeNodes(input)
-	current := nodes.FindNode("AAA")
 
+	// Part 1
 	steps := 0
+	current := nodes.FindNode("AAA")
 	for i := 0; i < len(instructions); i++ {
 		if current.Name == "ZZZ" {
 			fmt.Printf("Found ZZZ in {%d} steps!\n", steps)
