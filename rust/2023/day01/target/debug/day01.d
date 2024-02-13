@@ -1,0 +1,1 @@
+/home/definitepotato/Documents/20\ -\ Areas/20.3\ Code/definitepotato/github/aoc/rust/2023/day01/target/debug/day01: /home/definitepotato/Documents/20\ -\ Areas/20.3\ Code/definitepotato/github/aoc/rust/2023/day01/src/main.rs
