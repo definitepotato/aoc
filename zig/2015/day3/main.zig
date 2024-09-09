@@ -1,4 +1,5 @@
 const std = @import("std");
+const expect = std.testing.expect;
 const print = std.debug.print;
 const input = @embedFile("input.txt");
 
@@ -14,6 +15,17 @@ fn has_been_visited(list: std.ArrayList(pos), position: pos) bool {
         }
     }
     return false;
+}
+
+test "has been visited" {
+    const allocator = std.heap.page_allocator;
+
+    var visited_positions = std.ArrayList(pos).init(allocator);
+    defer visited_positions.deinit();
+
+    try visited_positions.append(.{ .x = 0, .y = 0 });
+    try expect(has_been_visited(visited_positions, .{ .x = 0, .y = 0 }) == true);
+    try expect(has_been_visited(visited_positions, .{ .x = 1, .y = 1 }) == false);
 }
 
 pub fn main() !void {

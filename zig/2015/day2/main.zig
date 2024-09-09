@@ -1,4 +1,5 @@
 const std = @import("std");
+const expect = std.testing.expect;
 const print = std.debug.print;
 const input = @embedFile("input.txt");
 
@@ -17,6 +18,10 @@ fn min(a: i32, b: i32, c: i32) i32 {
     }
 
     return smallest;
+}
+
+test "returns smallest" {
+    try expect(min(10, 25, 30) == 10);
 }
 
 pub fn main() !void {
