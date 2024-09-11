@@ -38,9 +38,9 @@ pub fn main() !void {
 
     const input = "bgvyzdsv";
 
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    defer _ = gpa.deinit();
-    const allocator = gpa.allocator();
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+    const allocator = arena.allocator();
 
     const md5 = crypto.hash.Md5;
 
