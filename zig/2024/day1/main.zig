@@ -41,6 +41,7 @@ pub fn main() !void {
     // print("[DEBUG] {any}\n", .{left.items});
     // print("[DEBUG] {any}\n", .{right.items});
 
+    // part1: calculate distance
     var total_distance: i32 = 0;
     for (left.items, 0..) |_, i| {
         if (right.items[i] > left.items[i]) {
@@ -54,6 +55,7 @@ pub fn main() !void {
 
     print("Part 1: {d}\n", .{total_distance});
 
+    // part2: calculate similarity
     var total_similarity: i32 = 0;
     var count_similarity: i32 = 0;
     for (left.items) |numLeft| {
