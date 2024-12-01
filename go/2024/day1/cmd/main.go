@@ -32,7 +32,7 @@ func main() {
 	sort.Ints(leftInt)
 	sort.Ints(rightInt)
 
-	// calculate distance
+	// part1: calculate distance
 	totalDistance := 0
 	for i := 0; i < len(leftInt); i++ {
 		if rightInt[i] > leftInt[i] {
@@ -46,6 +46,7 @@ func main() {
 
 	fmt.Printf("Part 1: %d\n", totalDistance)
 
+	// part2: calculate similarity
 	totalSimilarity := 0
 	countSimilarity := 0
 	for i := 0; i < len(leftInt); i++ {
