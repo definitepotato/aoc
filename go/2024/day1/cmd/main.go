@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"helpers"
+	"math"
 	"sort"
 	"strconv"
 	"strings"
@@ -33,19 +34,16 @@ func main() {
 	sort.Ints(rightInt)
 
 	// part1: calculate distance
-	totalDistance := 0
+	totalDistance := 0.00
 	for i := 0; i < len(leftInt); i++ {
-		// why doesn't go have a built-in abs func for integers? I have to write my own :(
-		if rightInt[i] > leftInt[i] {
-			totalDistance += rightInt[i] - leftInt[i]
-		}
+		// why doesn't go have a built-in abs func for integers?
+		left := float64(leftInt[i])
+		right := float64(rightInt[i])
 
-		if rightInt[i] < leftInt[i] {
-			totalDistance += leftInt[i] - rightInt[i]
-		}
+		totalDistance += math.Abs(left - right)
 	}
 
-	fmt.Printf("Part 1: %d\n", totalDistance)
+	fmt.Printf("Part 1: %d\n", int(totalDistance))
 
 	// part2: calculate similarity
 	totalSimilarity := 0
