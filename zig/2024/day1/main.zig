@@ -14,23 +14,10 @@ pub fn main() !void {
     defer right.deinit();
 
     // input here.
-    var tok = std.mem.tokenize(u8, file, "\n");
+    var tok = std.mem.tokenize(u8, file, " \n");
     while (tok.next()) |t| {
-        const ins = std.mem.tokenize(u8, t, " ");
-
-        const a = try std.fmt.parseInt(i32, &[_]u8{ins.buffer[0]}, 10);
-        const b = try std.fmt.parseInt(i32, &[_]u8{ins.buffer[1]}, 10);
-        const c = try std.fmt.parseInt(i32, &[_]u8{ins.buffer[2]}, 10);
-        const d = try std.fmt.parseInt(i32, &[_]u8{ins.buffer[3]}, 10);
-        const e = try std.fmt.parseInt(i32, &[_]u8{ins.buffer[4]}, 10);
-        const intLeft = (a * 10000) + (b * 1000) + (c * 100) + (d * 10) + e;
-
-        const f = try std.fmt.parseInt(i32, &[_]u8{ins.buffer[8]}, 10);
-        const g = try std.fmt.parseInt(i32, &[_]u8{ins.buffer[9]}, 10);
-        const h = try std.fmt.parseInt(i32, &[_]u8{ins.buffer[10]}, 10);
-        const i = try std.fmt.parseInt(i32, &[_]u8{ins.buffer[11]}, 10);
-        const j = try std.fmt.parseInt(i32, &[_]u8{ins.buffer[12]}, 10);
-        const intRight = (f * 10000) + (g * 1000) + (h * 100) + (i * 10) + j;
+        const intLeft = try std.fmt.parseInt(i32, t, 10);
+        const intRight = try std.fmt.parseInt(i32, tok.next().?, 10);
 
         try left.append(intLeft);
         try right.append(intRight);
