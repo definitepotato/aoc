@@ -42,15 +42,9 @@ pub fn main() !void {
     // print("[DEBUG] {any}\n", .{right.items});
 
     // part1: calculate distance
-    var total_distance: i32 = 0;
+    var total_distance: u32 = 0;
     for (left.items, 0..) |_, i| {
-        if (right.items[i] > left.items[i]) {
-            total_distance += right.items[i] - left.items[i];
-        }
-
-        if (right.items[i] < left.items[i]) {
-            total_distance += left.items[i] - right.items[i];
-        }
+        total_distance += @abs(left.items[i] - right.items[i]);
     }
 
     print("Part 1: {d}\n", .{total_distance});
