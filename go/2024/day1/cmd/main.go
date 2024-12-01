@@ -35,6 +35,7 @@ func main() {
 	// part1: calculate distance
 	totalDistance := 0
 	for i := 0; i < len(leftInt); i++ {
+		// why doesn't go have a built-in abs func for integers? I have to write my own :(
 		if rightInt[i] > leftInt[i] {
 			totalDistance += rightInt[i] - leftInt[i]
 		}
