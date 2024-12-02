@@ -50,7 +50,7 @@ func MinMax(array []int) (int, int) {
 func SliceStringToInt(input []string) []int {
 	var newInput []int
 
-	for _, v := range strings.Split(input[0], ",") {
+	for _, v := range input {
 		newInput = append(newInput, Stoi(v))
 	}
 
