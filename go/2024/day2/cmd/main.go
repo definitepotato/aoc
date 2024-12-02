@@ -39,6 +39,8 @@ func isIncreasing(list []string) bool {
 	return true
 }
 
+// Yes this essentially a copy of isIncreasing with 1 char difference
+// I'm okay with this, I want it to read nicely in main()
 func isDecreasing(list []string) bool {
 	listInt := helpers.SliceStringToInt(list)
 
