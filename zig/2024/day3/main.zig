@@ -5,5 +5,7 @@ const file = @embedFile("input.txt");
 pub fn main() void {
     var instructions = std.mem.tokenize(u8, file, "\n");
 
-    while (instructions.next()) |instr| {}
+    while (instructions.next()) |instr| {
+        print("{s}\n", .{instr});
+    }
 }
