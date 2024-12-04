@@ -8,13 +8,7 @@ import (
 const MagicWord = "XMAS"
 
 func isXmas(a, b, c, d byte) bool {
-	// XMAS
-	if a == 88 && b == 77 && c == 65 && d == 83 {
-		return true
-	}
-
-	// SAMX
-	if a == 83 && b == 65 && c == 77 && d == 88 {
+	if a == 'X' && b == 'M' && c == 'A' && d == 'S' {
 		return true
 	}
 
@@ -22,7 +16,7 @@ func isXmas(a, b, c, d byte) bool {
 }
 
 func main() {
-	file := helpers.ReadFile("../test.txt")
+	file := helpers.ReadFile("../input.txt")
 
 	var grid []string
 	for _, line := range file {
@@ -35,10 +29,10 @@ func main() {
 		// iterate a row on X axis
 		for x := range grid[y] {
 			// which directions can we check?
-			right := x < len(grid[y])-len(MagicWord)
-			left := x >= len(MagicWord)
-			down := y < len(grid)-len(MagicWord)
-			up := y >= len(MagicWord)
+			right := x <= len(grid[y])-len(MagicWord)
+			left := x >= len(MagicWord)-1
+			down := y <= len(grid)-len(MagicWord)
+			up := y >= len(MagicWord)-1
 
 			if right {
 				if isXmas(grid[y][x], grid[y][x+1], grid[y][x+2], grid[y][x+3]) {
@@ -88,7 +82,6 @@ func main() {
 					foundXmas += 1
 				}
 			}
-
 		}
 	}
 
