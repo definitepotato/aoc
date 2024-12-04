@@ -86,4 +86,34 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", foundXmas)
+
+	valid := false
+	foundMas := 0
+	// iterate each row of the grid on the Y axis
+	for y := 0; y < len(grid); y++ {
+		// iterate a row on X axis
+		for x := range grid[y] {
+			validCurrentLoc := y > 0 && y < len(grid)-1 && x > 0 && x < len(grid[y])-1
+
+			if validCurrentLoc {
+				if grid[y][x] == 'A' {
+					if grid[y-1][x-1] == 'M' && grid[y+1][x+1] == 'S' || grid[y-1][x-1] == 'S' && grid[y+1][x+1] == 'M' {
+						valid = true
+					}
+
+					if valid {
+						if grid[y-1][x+1] == 'M' && grid[y+1][x-1] == 'S' || grid[y-1][x+1] == 'S' && grid[y+1][x-1] == 'M' {
+							foundMas += 1
+							valid = false
+							continue
+						}
+					}
+
+					valid = false
+				}
+			}
+		}
+	}
+
+	fmt.Printf("Part 2: %d\n", foundMas)
 }
