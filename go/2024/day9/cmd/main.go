@@ -37,6 +37,82 @@ func checksum(fs []string) int {
 	return sum
 }
 
+func fileLen(fs []string, filename string) int {
+	// iterate filesystem in reverse
+	length := 0
+	for _, val := range fs {
+		if val == filename {
+			length += 1
+		}
+	}
+
+	return length
+}
+
+func blockLen(fs []string, idx int) int {
+	length := 0
+	for i := idx; i < len(fs); i++ {
+		if fs[i] != "." {
+			return length
+		}
+		length += 1
+	}
+
+	return length
+}
+
+func firstEmptyWithLen(fs []string, l int, upto int) int {
+	for i := 0; i < len(fs); i++ {
+		if i >= upto {
+			return -1
+		}
+
+		length := blockLen(fs, i)
+		if length >= l {
+			return i
+		}
+	}
+	return -1
+}
+
+func checksumV2(fs []string) int {
+	sum := 0
+	for idx := 0; idx < len(fs); idx++ {
+		n, _ := strconv.Atoi(fs[idx])
+		sum += idx * n
+	}
+
+	return sum
+}
+
+func moveFileV2(fs []string) {
+	// iterate file system in reverse
+	for idx := len(fs) - 1; idx >= 0; idx-- {
+		if fs[idx] == "." {
+			continue
+		}
+
+		// get the length of the current file
+		fileLength := fileLen(fs, fs[idx])
+		emptyBlockIdx := firstEmptyWithLen(fs, fileLength, idx)
+
+		// if -1 we couldn't find an empty block large enough to fit the file
+		// move on to the next file
+		if emptyBlockIdx == -1 {
+			continue
+		}
+
+		// move the file index by index swapping with empty indexes
+		for r := 0; r < fileLength; r++ {
+			// fmt.Printf("R%d: %s@%d => %s@%d\n", r, fs[idx-r], idx-r, fs[emptyBlockIdx+r], emptyBlockIdx+r)
+			fs[emptyBlockIdx+r] = fs[idx-r]
+			fs[idx-r] = "."
+		}
+
+		idx -= fileLength - 1
+	}
+}
+
 func main() {
 	file := helpers.ReadFile("../input.txt")
 
@@ -79,6 +155,12 @@ func main() {
 		}
 	}
 
+	eFS2 := make([]string, len(eFS))
+	copy(eFS2, eFS)
+
 	moveFile(eFS)
-	fmt.Println(checksum(eFS))
+	fmt.Printf("Part 1: %d\n", checksum(eFS))
+
+	moveFileV2(eFS2)
+	fmt.Printf("Part 2: %d\n", checksumV2(eFS2))
 }
