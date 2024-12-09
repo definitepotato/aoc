@@ -6,8 +6,12 @@ import (
 	"strconv"
 )
 
-func nextEmptyIdx(fs []string) int {
+func nextEmptyIdx(fs []string, upto int) int {
 	for idx := 0; idx < len(fs); idx++ {
+		if idx >= upto {
+			return -1
+		}
+
 		if fs[idx] == "." {
 			return idx
 		}
@@ -21,20 +25,17 @@ func moveFile(fs []string) {
 		if fs[idx] == "." {
 			continue
 		}
-		nextEmptyBlock := nextEmptyIdx(fs)
+
+		nextEmptyBlock := nextEmptyIdx(fs, idx)
+		// if -1 we couldn't find an empty block large enough to fit the file
+		// move on to the next file
+		if nextEmptyBlock == -1 {
+			continue
+		}
+
 		fs[nextEmptyBlock] = fs[idx]
 		fs[idx] = "."
 	}
-}
-
-func checksum(fs []string) int {
-	sum := 0
-	for idx := 1; idx < len(fs); idx++ {
-		n, _ := strconv.Atoi(fs[idx])
-		sum += (idx - 1) * n
-	}
-
-	return sum
 }
 
 func fileLen(fs []string, filename string) int {
@@ -61,7 +62,7 @@ func blockLen(fs []string, idx int) int {
 	return length
 }
 
-func firstEmptyWithLen(fs []string, l int, upto int) int {
+func nextEmptyWithLen(fs []string, l int, upto int) int {
 	for i := 0; i < len(fs); i++ {
 		if i >= upto {
 			return -1
@@ -75,7 +76,7 @@ func firstEmptyWithLen(fs []string, l int, upto int) int {
 	return -1
 }
 
-func checksumV2(fs []string) int {
+func checksum(fs []string) int {
 	sum := 0
 	for idx := 0; idx < len(fs); idx++ {
 		n, _ := strconv.Atoi(fs[idx])
@@ -94,7 +95,7 @@ func moveFileV2(fs []string) {
 
 		// get the length of the current file
 		fileLength := fileLen(fs, fs[idx])
-		emptyBlockIdx := firstEmptyWithLen(fs, fileLength, idx)
+		emptyBlockIdx := nextEmptyWithLen(fs, fileLength, idx)
 
 		// if -1 we couldn't find an empty block large enough to fit the file
 		// move on to the next file
@@ -162,5 +163,5 @@ func main() {
 	fmt.Printf("Part 1: %d\n", checksum(eFS))
 
 	moveFileV2(eFS2)
-	fmt.Printf("Part 2: %d\n", checksumV2(eFS2))
+	fmt.Printf("Part 2: %d\n", checksum(eFS2))
 }
