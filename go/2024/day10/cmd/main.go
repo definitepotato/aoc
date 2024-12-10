@@ -49,6 +49,7 @@ func traverse(startPos string, grid []string, points map[string]int) {
 	var stack Stack
 	stack.Push(startPos)
 
+	fmt.Println("===================================")
 	fmt.Printf("Starting: %s\n", startPos)
 	iteration := 0
 
@@ -70,9 +71,9 @@ func traverse(startPos string, grid []string, points map[string]int) {
 
 		if right {
 			fmt.Printf("Looking right ... ")
-			nextPos := fmt.Sprintf("%s,%s", strconv.Itoa(pointX+1), strconv.Itoa(pointY))
-			nextPosN, _ := strconv.Atoi(string(grid[pointX+1][pointY]))
-			fmt.Println("valid")
+			nextPos := fmt.Sprintf("%s,%s", strconv.Itoa(pointY+1), strconv.Itoa(pointX))
+			nextPosN, _ := strconv.Atoi(string(grid[pointX][pointY+1]))
+			fmt.Printf("found %d@%s\n", nextPosN, nextPos)
 
 			if nextPosN == 9 {
 				points[startPos] += 1
@@ -88,8 +89,8 @@ func traverse(startPos string, grid []string, points map[string]int) {
 		if left {
 			fmt.Printf("Looking left ... ")
 			nextPos := fmt.Sprintf("%s,%s", strconv.Itoa(pointX-1), strconv.Itoa(pointY))
-			nextPosN, _ := strconv.Atoi(string(grid[pointX-1][pointY]))
-			fmt.Println("valid")
+			nextPosN, _ := strconv.Atoi(string(grid[pointY][pointX-1]))
+			fmt.Printf("found %d@%s\n", nextPosN, nextPos)
 
 			if nextPosN == 9 {
 				points[startPos] += 1
@@ -105,8 +106,8 @@ func traverse(startPos string, grid []string, points map[string]int) {
 		if up {
 			fmt.Printf("Looking up ... ")
 			nextPos := fmt.Sprintf("%s,%s", strconv.Itoa(pointX), strconv.Itoa(pointY-1))
-			nextPosN, _ := strconv.Atoi(string(grid[pointX][pointY-1]))
-			fmt.Println("valid")
+			nextPosN, _ := strconv.Atoi(string(grid[pointY-1][pointX]))
+			fmt.Printf("found %d@%s\n", nextPosN, nextPos)
 
 			if nextPosN == 9 {
 				points[startPos] += 1
@@ -122,8 +123,8 @@ func traverse(startPos string, grid []string, points map[string]int) {
 		if down {
 			fmt.Printf("Looking down ... ")
 			nextPos := fmt.Sprintf("%s,%s", strconv.Itoa(pointX), strconv.Itoa(pointY+1))
-			nextPosN, _ := strconv.Atoi(string(grid[pointX][pointY+1]))
-			fmt.Println("valid")
+			nextPosN, _ := strconv.Atoi(string(grid[pointY+1][pointX]))
+			fmt.Printf("found %d@%s\n", nextPosN, nextPos)
 
 			if nextPosN == 9 {
 				points[startPos] += 1
@@ -153,9 +154,8 @@ func main() {
 		trailheadStack.Push(point)
 	}
 
-	// for !stack.IsEmpty() {
-	// 	traverse(stack.Pop(), grid, points)
-	// }
-	traverse(trailheadStack.Pop(), grid, points)
+	for !trailheadStack.IsEmpty() {
+		traverse(trailheadStack.Pop(), grid, points)
+	}
 	fmt.Println(points)
 }
