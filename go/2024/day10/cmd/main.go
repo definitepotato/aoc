@@ -77,7 +77,6 @@ func traverse(startPos string, grid []string, points map[string]int) {
 
 			if nextPosN == 9 && curPosN == 8 {
 				points[startPos] += 1
-				return
 			}
 
 			if nextPosN == curPosN+1 {
