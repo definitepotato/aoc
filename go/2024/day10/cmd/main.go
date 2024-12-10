@@ -1,0 +1,161 @@
+package main
+
+import (
+	"fmt"
+	"helpers"
+	"strconv"
+	"strings"
+)
+
+type Stack []string
+
+func (s *Stack) Push(point string) {
+	*s = append(*s, point)
+}
+
+func (s *Stack) Pop() string {
+	if len(*s) == 0 {
+		return "-1"
+	}
+
+	top := (*s)[len(*s)-1]
+	*s = (*s)[:len(*s)-1]
+	return top
+}
+
+func (s Stack) IsEmpty() bool {
+	return len(s) == 0
+}
+
+func startingPoints(grid []string) map[string]int {
+	points := make(map[string]int, 0)
+
+	for y := 0; y < len(grid); y++ {
+		for x := 0; x < len(grid[y]); x++ {
+			if grid[y][x] == '0' {
+				pointY := strconv.Itoa(y)
+				pointX := strconv.Itoa(x)
+
+				point := fmt.Sprintf("%s,%s", pointY, pointX)
+				points[point] = 0
+			}
+		}
+	}
+
+	return points
+}
+
+func traverse(startPos string, grid []string, points map[string]int) {
+	var stack Stack
+	stack.Push(startPos)
+
+	fmt.Printf("Starting: %s\n", startPos)
+	iteration := 0
+
+	for !stack.IsEmpty() {
+		iteration += 1
+		fmt.Println("---------------------------------")
+		fmt.Printf("Iteration: %d\n", iteration)
+
+		curPos := stack.Pop()
+		pointX, _ := strconv.Atoi(strings.Split(curPos, ",")[0])
+		pointY, _ := strconv.Atoi(strings.Split(curPos, ",")[1])
+		curPosN, _ := strconv.Atoi(string(grid[pointX][pointY]))
+		fmt.Printf("Popping: %s => %d\n", curPos, curPosN)
+
+		right := pointX < len(grid[0])
+		left := pointX > 0
+		up := pointY > 0
+		down := pointY < len(grid)
+
+		if right {
+			fmt.Printf("Looking right ... ")
+			nextPos := fmt.Sprintf("%s,%s", strconv.Itoa(pointX+1), strconv.Itoa(pointY))
+			nextPosN, _ := strconv.Atoi(string(grid[pointX+1][pointY]))
+			fmt.Println("valid")
+
+			if nextPosN == 9 {
+				points[startPos] += 1
+				return
+			}
+
+			if nextPosN == curPosN+1 {
+				fmt.Printf("Pushing: %s => %d\n", nextPos, nextPosN)
+				stack.Push(nextPos)
+			}
+		}
+
+		if left {
+			fmt.Printf("Looking left ... ")
+			nextPos := fmt.Sprintf("%s,%s", strconv.Itoa(pointX-1), strconv.Itoa(pointY))
+			nextPosN, _ := strconv.Atoi(string(grid[pointX-1][pointY]))
+			fmt.Println("valid")
+
+			if nextPosN == 9 {
+				points[startPos] += 1
+				return
+			}
+
+			if nextPosN == curPosN+1 {
+				fmt.Printf("Pushing: %s\n", nextPos)
+				stack.Push(nextPos)
+			}
+		}
+
+		if up {
+			fmt.Printf("Looking up ... ")
+			nextPos := fmt.Sprintf("%s,%s", strconv.Itoa(pointX), strconv.Itoa(pointY-1))
+			nextPosN, _ := strconv.Atoi(string(grid[pointX][pointY-1]))
+			fmt.Println("valid")
+
+			if nextPosN == 9 {
+				points[startPos] += 1
+				return
+			}
+
+			if nextPosN == curPosN+1 {
+				fmt.Printf("Pushing: %s\n", nextPos)
+				stack.Push(nextPos)
+			}
+		}
+
+		if down {
+			fmt.Printf("Looking down ... ")
+			nextPos := fmt.Sprintf("%s,%s", strconv.Itoa(pointX), strconv.Itoa(pointY+1))
+			nextPosN, _ := strconv.Atoi(string(grid[pointX][pointY+1]))
+			fmt.Println("valid")
+
+			if nextPosN == 9 {
+				points[startPos] += 1
+				return
+			}
+
+			if nextPosN == curPosN+1 {
+				fmt.Printf("Pushing: %s\n", nextPos)
+				stack.Push(nextPos)
+			}
+		}
+	}
+}
+
+func main() {
+	input := helpers.ReadFile("../test.txt")
+	var grid []string
+
+	for _, line := range input {
+		grid = append(grid, line)
+	}
+
+	points := startingPoints(grid)
+
+	var trailheadStack Stack
+	for point := range points {
+		trailheadStack.Push(point)
+	}
+
+	// for !stack.IsEmpty() {
+	// 	traverse(stack.Pop(), grid, points)
+	// }
+	traverse(trailheadStack.Pop(), grid, points)
+	fmt.Println(points)
+}
