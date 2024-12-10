@@ -60,7 +60,7 @@ func traverse(startPos string, grid []string, points map[string]int) {
 
 	visited := make(map[string]bool, 0)
 
-	fmt.Println("===================================")
+	fmt.Println("=================================")
 	fmt.Printf("Starting: %s\n", startPos)
 	iteration := 0
 
@@ -92,12 +92,12 @@ func traverse(startPos string, grid []string, points map[string]int) {
 					continue
 				}
 
-				fmt.Printf("Score: %s => %d\n", nextPos, points[startPos])
 				points[startPos] += 1
 				visited[nextPos] = true
+				fmt.Printf("Score: %s => %d\n", startPos, points[startPos])
 			}
 
-			if nextPosN == curPosN+1 {
+			if nextPosN == curPosN+1 && curPosN != 8 {
 				fmt.Printf("Pushing: %s => %d\n", nextPos, nextPosN)
 				stack.Push(nextPos)
 			}
@@ -115,12 +115,12 @@ func traverse(startPos string, grid []string, points map[string]int) {
 					continue
 				}
 
-				fmt.Printf("Score: %s => %d\n", nextPos, points[nextPos])
 				points[startPos] += 1
 				visited[nextPos] = true
+				fmt.Printf("Score: %s => %d\n", startPos, points[startPos])
 			}
 
-			if nextPosN == curPosN+1 {
+			if nextPosN == curPosN+1 && curPosN != 8 {
 				fmt.Printf("Pushing: %s => %d\n", nextPos, nextPosN)
 				stack.Push(nextPos)
 			}
@@ -138,12 +138,12 @@ func traverse(startPos string, grid []string, points map[string]int) {
 					continue
 				}
 
-				fmt.Printf("Score: %s => %d\n", nextPos, points[nextPos])
 				points[startPos] += 1
 				visited[nextPos] = true
+				fmt.Printf("Score: %s => %d\n", startPos, points[startPos])
 			}
 
-			if nextPosN == curPosN+1 {
+			if nextPosN == curPosN+1 && curPosN != 8 {
 				fmt.Printf("Pushing: %s => %d\n", nextPos, nextPosN)
 				stack.Push(nextPos)
 			}
@@ -161,12 +161,12 @@ func traverse(startPos string, grid []string, points map[string]int) {
 					continue
 				}
 
-				fmt.Printf("Score: %s => %d\n", nextPos, points[nextPos])
 				points[startPos] += 1
 				visited[nextPos] = true
+				fmt.Printf("Score: %s => %d\n", startPos, points[startPos])
 			}
 
-			if nextPosN == curPosN+1 {
+			if nextPosN == curPosN+1 && curPosN != 8 {
 				fmt.Printf("Pushing: %s => %d\n", nextPos, nextPosN)
 				stack.Push(nextPos)
 			}
