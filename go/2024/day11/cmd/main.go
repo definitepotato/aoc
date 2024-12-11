@@ -7,10 +7,9 @@ import (
 )
 
 const (
-	Stones         = "0 1 10 99 999" // [1 blink] 1 2024 1 0 9 9 2021976
-	TestInput      = "125 17"        // [6 blinks] 2097446912 14168 4048 2 0 2 4 40 48 2024 40 48 80 96 2 8 6 7 6 0 3 2
-	PuzzleInput    = "510613 358 84 40702 4373582 2 0 1584"
-	NumberOfBlinks = 25
+	Stones      = "0 1 10 99 999" // [1 blink] 1 2024 1 0 9 9 2021976
+	TestInput   = "125 17"        // [6 blinks] 2097446912 14168 4048 2 0 2 4 40 48 2024 40 48 80 96 2 8 6 7 6 0 3 2
+	PuzzleInput = "510613 358 84 40702 4373582 2 0 1584"
 )
 
 func sliceStringToInt(in []string) []int {
@@ -35,11 +34,11 @@ func insert(in []int, idx int, val int) []int {
 	return out
 }
 
-func main() {
-	inputString := strings.Split(PuzzleInput, " ")
+func countStones(in string) int {
+	inputString := strings.Split(in, " ")
 	inputSlice := sliceStringToInt(inputString)
 
-	for c := 0; c < NumberOfBlinks; c++ {
+	for c := 0; c < 25; c++ {
 		var newStones []int
 		for _, stone := range inputSlice {
 			if stone == 0 {
@@ -62,5 +61,9 @@ func main() {
 		inputSlice = newStones
 	}
 
-	fmt.Printf("Part 1: %d\n", len(inputSlice))
+	return len(inputSlice)
+}
+
+func main() {
+	fmt.Printf("Part 1: %d\n", countStones(PuzzleInput))
 }
