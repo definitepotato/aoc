@@ -64,6 +64,71 @@ func countStones(in string) int {
 	return len(inputSlice)
 }
 
+// Part 2 starts here.
+// Not my code, I couldn't figure this out but wanted to learn so
+// I copied most of the solve from: https://kyle.so/writing/aoc-2024
+func blinkOnce(stone int) []int {
+	if stone == 0 {
+		return []int{1}
+	}
+
+	// convert to string to check digits
+	s := strconv.Itoa(stone)
+
+	if len(s)%2 == 0 {
+		left := s[:len(s)/2]  // left half of number
+		right := s[len(s)/2:] // right half of number
+
+		stoneLeft, _ := strconv.Atoi(left)   // convert back to number
+		stoneRight, _ := strconv.Atoi(right) // convert back to number
+
+		return []int{stoneLeft, stoneRight}
+	}
+
+	return []int{stone * 2024}
+}
+
+func blinkAllStones(stoneCount map[int]int) map[int]int {
+	nc := make(map[int]int)
+
+	for s, c := range stoneCount {
+		// get new stones from transformation
+		ns := blinkOnce(s)
+		// add to counts, multiplied by how many of oritinal stones we had
+		for _, n := range ns {
+			nc[n] += c
+		}
+	}
+
+	return nc
+}
+
+func sumStones(stoneCount map[int]int) int {
+	total := 0
+	for _, c := range stoneCount {
+		total += c
+	}
+	return total
+}
+
+func countStonesFaster(in string) int {
+	inputString := strings.Split(in, " ")
+	inputSlice := sliceStringToInt(inputString)
+
+	// count freq of each stone val
+	freq := make(map[int]int)
+	for _, stone := range inputSlice {
+		freq[stone]++
+	}
+
+	for c := 0; c < 75; c++ {
+		freq = blinkAllStones(freq)
+	}
+
+	return sumStones(freq)
+}
+
 func main() {
 	fmt.Printf("Part 1: %d\n", countStones(PuzzleInput))
+	fmt.Printf("Part 2: %d\n", countStonesFaster(PuzzleInput))
 }
