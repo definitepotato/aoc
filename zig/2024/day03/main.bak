@@ -1,0 +1,74 @@
+const std = @import("std");
+const regex = @import("regex");
+const print = std.debug.print;
+const file = @embedFile("test.txt");
+
+pub fn main() !void {
+    const instructions = std.mem.tokenizeAny(u8, file, "\n");
+    const input = instructions.buffer;
+    const keyword = "mul(";
+
+    // Start searching from the beginning of the string
+    var start_index: usize = 0;
+
+    while (start_index < input.len) {
+        // Find the next occurrence of "mul("
+        const match_start = std.mem.indexOf(u8, input[start_index..], keyword);
+        if (match_start == null) break; // No more matches
+
+        // Calculate the start of the match
+        const start = start_index + match_start.?;
+        const remaining = input[start..];
+
+        // Find the closing parenthesis ')' after "mul("
+        const closing_paren = std.mem.indexOf(u8, remaining, ")") orelse break;
+
+        // Extract the match and print it
+        const match = remaining[0 .. closing_paren + 1];
+        print("Found: {s}\n", .{match});
+
+        // Move start_index past this match for the next iteration
+        start_index = start + closing_paren + 1;
+    }
+
+    // var instructions = std.mem.tokenize(u8, file, "\n");
+    // var result1: i32 = 0;
+    //
+    // // collect the index of the first number of each valid 'mul(' sequence
+    // while (instructions.next()) |instr| {
+    //     // split instances starting with "mul("
+    //     var mul = std.mem.tokenizeAny(u8, instr, "mul(");
+    //     print("{s}\n", .{mul.buffer});
+    //
+    //     while (mul.next()) |m| {
+    //         // for each instance of "mul(" split on ")"
+    //         var closing_paren = std.mem.tokenizeAny(u8, m, ")");
+    //
+    //         while (closing_paren.next()) |c| {
+    //             const last_byte = c[c.len - 1];
+    //
+    //             // if the last byte before the ")" is a number, we have our two numbers
+    //             // separated by a comma, i.e. 11,8
+    //             if (last_byte >= 48 and last_byte <= 57) {
+    //                 var numbers = std.mem.tokenizeAny(u8, c, ",");
+    //                 print("{s}\n", .{numbers.buffer});
+    //
+    //                 while (numbers.next()) |n| {
+    //                     const next_n = numbers.next();
+    //                     if (next_n) |next| {
+    //                         const n1 = try std.fmt.parseInt(i32, n, 10);
+    //                         const n2 = try std.fmt.parseInt(i32, next, 10);
+    //                         result1 += n1 * n2;
+    //                     } else {
+    //                         // print("{s}\n", .{n});
+    //                         const n1 = try std.fmt.parseInt(i32, n, 10);
+    //                         result1 += n1 * n1;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    //
+    // print("Part 1: {d}\n", .{result1});
+}
