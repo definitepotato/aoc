@@ -94,7 +94,7 @@ func blinkAllStones(stoneCount map[int]int) map[int]int {
 	for s, c := range stoneCount {
 		// get new stones from transformation
 		ns := blinkOnce(s)
-		// add to counts, multiplied by how many of oritinal stones we had
+		// add to counts, multiplied by how many of original stones we had
 		for _, n := range ns {
 			nc[n] += c
 		}
