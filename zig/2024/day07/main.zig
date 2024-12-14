@@ -39,7 +39,8 @@ pub fn main() !void {
     defer arena.deinit();
 
     var lines = std.mem.tokenizeScalar(u8, input, '\n');
-    var result: usize = 0;
+    var result1: usize = 0;
+    var result2: usize = 0;
 
     while (lines.next()) |line| {
         var ns = std.BoundedArray(usize, 15).init(0) catch unreachable;
@@ -49,8 +50,10 @@ pub fn main() !void {
             try ns.append(try std.fmt.parseInt(usize, num, 10));
         }
 
-        result += solve(ns, 2);
+        result1 += solve(ns, 2);
+        result2 += solve(ns, 3);
     }
 
-    print("Part 1: {d}\n", .{result});
+    print("Part 1: {d}\n", .{result1});
+    print("Part 2: {d}\n", .{result2});
 }
