@@ -1,42 +1,56 @@
 const std = @import("std");
-const math = std.math;
 const print = std.debug.print;
-const file = @embedFile("test.txt");
+const mem = std.mem;
+const input = @embedFile("input.txt");
 
-fn processRow(row: []const u8, map: *std.AutoHashMap(usize, []usize)) !void {
-    const allocator = std.heap.page_allocator;
+fn solve(ns: std.BoundedArray(usize, 15), num_ops: comptime_int) usize {
+    const combo_max = std.math.pow(usize, num_ops, (ns.len - 2));
+    const goal = ns.get(0);
+    var combo: u32 = 0;
 
-    var list = std.ArrayList(usize).init(allocator);
-    defer allocator.free(list);
+    combos: while (combo < combo_max) : (combo += 1) {
+        var result = ns.get(1);
+        var ops = combo;
 
-    var r = std.mem.tokenize(u8, row, ": ");
-    const key = r.next();
-    const key_int = try std.fmt.parseInt(usize, key.?, 10);
+        for (ns.constSlice()[2..]) |n| {
+            if (result > goal) {
+                continue :combos;
+            }
 
-    while (r.next()) |value| {
-        const value_int = try std.fmt.parseInt(usize, value, 10);
-        try list.append(value_int);
+            const op = ops % num_ops;
+            ops /= num_ops;
+            switch (op) {
+                0 => result += n,
+                1 => result *= n,
+                2 => {
+                    const adj: usize = if (n >= 100) 1000 else if (n >= 10) 100 else 10;
+                    result = result * adj + n;
+                },
+                else => unreachable,
+            }
+        }
+        if (result == goal) return goal;
     }
-
-    const values = try list.toOwnedSlice();
-    try map.put(key_int, values);
+    return 0;
 }
 
 pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    defer _ = gpa.deinit();
-    const allocator = gpa.allocator();
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
 
-    var map = std.AutoHashMap(usize, []usize).init(allocator);
-    defer map.deinit();
+    var lines = std.mem.tokenizeScalar(u8, input, '\n');
+    var result: usize = 0;
 
-    var line = std.mem.tokenize(u8, file, "\n");
-    while (line.next()) |l| {
-        try processRow(l, &map);
+    while (lines.next()) |line| {
+        var ns = std.BoundedArray(usize, 15).init(0) catch unreachable;
+        var nums = std.mem.tokenizeAny(u8, line, ": ");
+
+        while (nums.next()) |num| {
+            try ns.append(try std.fmt.parseInt(usize, num, 10));
+        }
+
+        result += solve(ns, 2);
     }
 
-    var map_it = map.iterator();
-    while (map_it.next()) |entry| {
-        print("{any}\n", .{entry});
-    }
+    print("Part 1: {d}\n", .{result});
 }
