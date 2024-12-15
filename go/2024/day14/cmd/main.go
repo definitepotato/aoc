@@ -6,6 +6,7 @@ import (
 	"math"
 	"regexp"
 	"strconv"
+	"time"
 )
 
 const (
@@ -27,6 +28,37 @@ func absolute(a int) int {
 func atoiNoError(s string) int {
 	v, _ := strconv.Atoi(s)
 	return v
+}
+
+func printGrid(r []Robot) (bool, [GridY][GridX]string) {
+	var grid [GridY][GridX]string
+
+	for y := 0; y < GridY; y++ {
+		for x := 0; x < GridX; x++ {
+			grid[y][x] = "."
+		}
+	}
+
+	for _, robot := range r {
+		grid[robot.PosY][robot.PosX] = "A"
+	}
+
+	count := 0
+	for y := 0; y < GridY; y++ {
+		for x := 0; x < GridX; x++ {
+			if grid[y][x] == "A" {
+				count++
+			}
+		}
+
+		if count > 30 {
+			return true, grid
+		}
+
+		count = 0
+	}
+
+	return false, [GridY][GridX]string{}
 }
 
 func quadrant(x, y int) int {
@@ -109,5 +141,19 @@ func main() {
 
 	quadrantCount := countRobotsInQuadrants(robots)
 	result := solve(quadrantCount)
-	fmt.Println(result)
+	fmt.Printf("Part 1: %d\n", result)
+
+	iter := 0
+	for {
+		robots = moveAllRobots(robots)
+		iter += 1
+		res, grid := printGrid(robots)
+		if res {
+			for _, g := range grid {
+				fmt.Println(g)
+			}
+			fmt.Printf("Part 2: %d\n", iter)
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
 }
