@@ -147,8 +147,8 @@ func main() {
 	for {
 		robots = moveAllRobots(robots)
 		iter += 1
-		res, grid := maybeTree(robots)
-		if res {
+		isTree, grid := maybeTree(robots)
+		if isTree {
 			for _, g := range grid {
 				fmt.Println(g)
 			}
