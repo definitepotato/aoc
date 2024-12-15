@@ -30,7 +30,7 @@ func atoiNoError(s string) int {
 	return v
 }
 
-func printGrid(r []Robot) (bool, [GridY][GridX]string) {
+func maybeTree(r []Robot) (bool, [GridY][GridX]string) {
 	var grid [GridY][GridX]string
 
 	for y := 0; y < GridY; y++ {
@@ -147,13 +147,13 @@ func main() {
 	for {
 		robots = moveAllRobots(robots)
 		iter += 1
-		res, grid := printGrid(robots)
+		res, grid := maybeTree(robots)
 		if res {
 			for _, g := range grid {
 				fmt.Println(g)
 			}
 			fmt.Printf("Part 2: %d\n", iter)
 		}
-		time.Sleep(10 * time.Millisecond)
+		time.Sleep(5 * time.Millisecond)
 	}
 }
