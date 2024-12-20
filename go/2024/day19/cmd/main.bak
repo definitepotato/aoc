@@ -1,0 +1,59 @@
+package main
+
+import (
+	"fmt"
+	"helpers"
+	"strings"
+)
+
+func designIsPossible(designs map[int]bool) bool {
+	for _, v := range designs {
+		if !v {
+			return false
+		}
+	}
+	return true
+}
+
+func main() {
+	file := helpers.ReadFile("../input.txt")
+	designs := make(map[int]bool, 0)
+	possible := 0
+
+	// towels slice
+	towels := file[0]
+	towelSlice := strings.Split(towels, ", ")
+
+	// iterate each pattern
+	for _, design := range file[2:] {
+		for k := 0; k < len(design); k++ {
+			designs[k] = false
+		}
+
+		for _, towel := range towelSlice {
+			// slide towel along design (window is design using len of towel)
+			for left := 0; left <= len(design)-len(towel); left++ {
+				right := left + len(towel)
+				window := design[left:right]
+
+				if towel == window {
+					for j := left; j < right; j++ {
+						designs[j] = true
+					}
+				}
+			}
+		}
+		fmt.Printf("%s: ", design)
+		fmt.Println(designs)
+
+		if designIsPossible(designs) {
+			possible += 1
+		}
+
+		for l := range designs {
+			delete(designs, l)
+		}
+	}
+
+	fmt.Printf("Part 1: %d\n", possible)
+}
