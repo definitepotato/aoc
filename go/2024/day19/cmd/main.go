@@ -8,34 +8,41 @@ import (
 
 const Towels = "r, wr, b, g, bwu, rb, gb, br"
 
-func completePattern(pattern string) bool {
+var mem = make(map[string]int, 0)
+
+func completePattern(pattern string) int {
+	if value, ok := mem[pattern]; ok {
+		return value
+	}
+
 	if pattern == "" {
-		return true
+		return 1
 	}
 
-	done := false
+	match := 0
 	for _, towel := range strings.Split(Towels, ", ") {
-		if done {
-			return done
-		}
-
 		if strings.HasPrefix(pattern, towel) {
-			done = completePattern(pattern[len(towel):])
+			match += completePattern(pattern[len(towel):])
 		}
 	}
 
-	return false
+	mem[pattern] = match
+	return match
 }
 
 func main() {
-	input := helpers.ReadFile("../input.txt")
+	input := helpers.ReadFile("../test.txt")
 	part1 := 0
+	part2 := 0
 
 	for _, pattern := range input[2:] {
-		if completePattern(pattern) {
+		result := completePattern(pattern)
+		if result > 0 {
 			part1 += 1
 		}
+		part2 += result
 	}
 
 	fmt.Printf("Part 1: %d\n", part1)
+	fmt.Printf("Part 2: %d\n", part2)
 }
