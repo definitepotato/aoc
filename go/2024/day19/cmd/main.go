@@ -19,15 +19,13 @@ func completePattern(pattern string) int {
 		return 1
 	}
 
-	match := 0
 	for _, towel := range strings.Split(Towels, ", ") {
 		if strings.HasPrefix(pattern, towel) {
-			match += completePattern(pattern[len(towel):])
+			mem[pattern] += completePattern(pattern[len(towel):])
 		}
 	}
 
-	mem[pattern] = match
-	return match
+	return mem[pattern]
 }
 
 func main() {
