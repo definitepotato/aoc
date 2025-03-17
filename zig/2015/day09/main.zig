@@ -48,7 +48,7 @@ const Lights = struct {
         return count;
     }
 
-    pub fn lights(self: *Self, from: [2]usize, to: [2]usize, action: Action) void {
+    pub fn flip_lights(self: *Self, from: [2]usize, to: [2]usize, action: Action) void {
         const x_start: usize = from[0];
         const x_end: usize = to[0];
         const y_start: usize = from[1];
@@ -89,23 +89,23 @@ test "count lights" {
 test "lights on" {
     var lights = Lights.init();
 
-    lights.lights([2]usize{ 0, 0 }, [2]usize{ 2, 2 }, .On);
+    lights.flip_lights([2]usize{ 0, 0 }, [2]usize{ 2, 2 }, .On);
     assert(lights.count_lights() == 9);
 }
 
 test "lights off" {
     var lights = Lights.init();
 
-    lights.lights([2]usize{ 0, 0 }, [2]usize{ 2, 2 }, .On);
-    lights.lights([2]usize{ 0, 0 }, [2]usize{ 1, 1 }, .Off);
+    lights.flip_lights([2]usize{ 0, 0 }, [2]usize{ 2, 2 }, .On);
+    lights.flip_lights([2]usize{ 0, 0 }, [2]usize{ 1, 1 }, .Off);
     assert(lights.count_lights() == 5);
 }
 
 test "lights toggle" {
     var lights = Lights.init();
 
-    lights.lights([2]usize{ 0, 0 }, [2]usize{ 2, 2 }, .On);
-    lights.lights([2]usize{ 0, 0 }, [2]usize{ 1, 1 }, .Toggle);
+    lights.flip_lights([2]usize{ 0, 0 }, [2]usize{ 2, 2 }, .On);
+    lights.flip_lights([2]usize{ 0, 0 }, [2]usize{ 1, 1 }, .Toggle);
     assert(lights.count_lights() == 5);
 }
 
@@ -190,7 +190,11 @@ pub fn main() !void {
     var lines = std.mem.tokenizeAny(u8, input, "\n");
     while (lines.next()) |line| {
         const instr = try process_instruction(line);
-        lights.lights([2]usize{ instr.start_x, instr.start_y }, [2]usize{ instr.end_x, instr.end_y }, instr.action);
+        lights.flip_lights(
+            [2]usize{ instr.start_x, instr.start_y },
+            [2]usize{ instr.end_x, instr.end_y },
+            instr.action,
+        );
     }
 
     print("Part 1: {d}\n", .{lights.count_lights()});
