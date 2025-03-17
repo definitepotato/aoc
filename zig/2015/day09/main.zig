@@ -13,9 +13,13 @@ const Lights = struct {
     const Self = @This();
 
     yx: [1000][1000]bool,
+    brightness: [1000][1000]usize,
 
     pub fn init() Lights {
-        return Lights{ .yx = std.mem.zeroes([1000][1000]bool) };
+        return Lights{
+            .yx = std.mem.zeroes([1000][1000]bool),
+            .brightness = std.mem.zeroes([1000][1000]usize),
+        };
     }
 
     pub fn count_lights(self: Self) usize {
@@ -32,6 +36,18 @@ const Lights = struct {
         return count;
     }
 
+    pub fn measure_brightness(self: Self) usize {
+        var count: usize = 0;
+
+        for (self.brightness) |y| {
+            for (y) |x| {
+                count += x;
+            }
+        }
+
+        return count;
+    }
+
     pub fn lights(self: *Self, from: [2]usize, to: [2]usize, action: Action) void {
         const x_start: usize = from[0];
         const x_end: usize = to[0];
@@ -41,9 +57,20 @@ const Lights = struct {
         for (y_start..y_end + 1) |y| {
             for (x_start..x_end + 1) |x| {
                 switch (action) {
-                    .On => self.yx[x][y] = true,
-                    .Off => self.yx[x][y] = false,
-                    .Toggle => self.yx[x][y] = !self.yx[x][y],
+                    .On => {
+                        self.yx[x][y] = true;
+                        self.brightness[x][y] += 1;
+                    },
+                    .Off => {
+                        self.yx[x][y] = false;
+                        if (self.brightness[x][y] > 0) {
+                            self.brightness[x][y] -= 1;
+                        }
+                    },
+                    .Toggle => {
+                        self.yx[x][y] = !self.yx[x][y];
+                        self.brightness[x][y] += 2;
+                    },
                 }
             }
         }
@@ -167,4 +194,5 @@ pub fn main() !void {
     }
 
     print("Part 1: {d}\n", .{lights.count_lights()});
+    print("Part 2: {d}\n", .{lights.measure_brightness()});
 }
