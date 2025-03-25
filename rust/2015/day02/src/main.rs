@@ -16,15 +16,9 @@ pub fn main() {
 
     for line in lines {
         let parts: Vec<u32> = line.split("x").map(|n| n.parse::<u32>().unwrap()).collect();
-        let l: u32 = parts[0];
-        let w: u32 = parts[1];
-        let h: u32 = parts[2];
+        let (l, w, h) = (parts[0], parts[1], parts[2]);
 
-        let mut areas = Vec::new();
-        areas.push(l * w);
-        areas.push(w * h);
-        areas.push(l * h);
-
+        let areas = [l * w, w * h, h * l];
         let smallest = areas.iter().min().unwrap();
 
         sum += 2 * ((l * w) + (w * h) + (h * l)) + smallest;
