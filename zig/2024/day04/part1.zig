@@ -24,37 +24,14 @@ const input_test =
 pub fn findXmas(x: usize, y: usize, dir: Dir, matrix: ds.Matrix(u8)) usize {
     var found: usize = 0;
 
-    if (dir.up) {
-        if (matrix.get(x, y - 1) == 'M' and matrix.get(x, y - 2) == 'A' and matrix.get(x, y - 3) == 'S') found += 1;
-    }
-
-    if (dir.down) {
-        if (matrix.get(x, y + 1) == 'M' and matrix.get(x, y + 2) == 'A' and matrix.get(x, y + 3) == 'S') found += 1;
-    }
-
-    if (dir.left) {
-        if (matrix.get(x - 1, y) == 'M' and matrix.get(x - 2, y) == 'A' and matrix.get(x - 3, y) == 'S') found += 1;
-    }
-
-    if (dir.right) {
-        if (matrix.get(x + 1, y) == 'M' and matrix.get(x + 2, y) == 'A' and matrix.get(x + 3, y) == 'S') found += 1;
-    }
-
-    if (dir.up and dir.right) {
-        if (matrix.get(x + 1, y - 1) == 'M' and matrix.get(x + 2, y - 2) == 'A' and matrix.get(x + 3, y - 3) == 'S') found += 1;
-    }
-
-    if (dir.up and dir.left) {
-        if (matrix.get(x - 1, y - 1) == 'M' and matrix.get(x - 2, y - 2) == 'A' and matrix.get(x - 3, y - 3) == 'S') found += 1;
-    }
-
-    if (dir.down and dir.right) {
-        if (matrix.get(x + 1, y + 1) == 'M' and matrix.get(x + 2, y + 2) == 'A' and matrix.get(x + 3, y + 3) == 'S') found += 1;
-    }
-
-    if (dir.down and dir.left) {
-        if (matrix.get(x - 1, y + 1) == 'M' and matrix.get(x - 2, y + 2) == 'A' and matrix.get(x - 3, y + 3) == 'S') found += 1;
-    }
+    if (dir.up and matrix.get(x, y - 1) == 'M' and matrix.get(x, y - 2) == 'A' and matrix.get(x, y - 3) == 'S') found += 1;
+    if (dir.down and matrix.get(x, y + 1) == 'M' and matrix.get(x, y + 2) == 'A' and matrix.get(x, y + 3) == 'S') found += 1;
+    if (dir.left and matrix.get(x - 1, y) == 'M' and matrix.get(x - 2, y) == 'A' and matrix.get(x - 3, y) == 'S') found += 1;
+    if (dir.right and matrix.get(x + 1, y) == 'M' and matrix.get(x + 2, y) == 'A' and matrix.get(x + 3, y) == 'S') found += 1;
+    if (dir.up and dir.right and matrix.get(x + 1, y - 1) == 'M' and matrix.get(x + 2, y - 2) == 'A' and matrix.get(x + 3, y - 3) == 'S') found += 1;
+    if (dir.up and dir.left and matrix.get(x - 1, y - 1) == 'M' and matrix.get(x - 2, y - 2) == 'A' and matrix.get(x - 3, y - 3) == 'S') found += 1;
+    if (dir.down and dir.right and matrix.get(x + 1, y + 1) == 'M' and matrix.get(x + 2, y + 2) == 'A' and matrix.get(x + 3, y + 3) == 'S') found += 1;
+    if (dir.down and dir.left and matrix.get(x - 1, y + 1) == 'M' and matrix.get(x - 2, y + 2) == 'A' and matrix.get(x - 3, y + 3) == 'S') found += 1;
 
     return found;
 }
