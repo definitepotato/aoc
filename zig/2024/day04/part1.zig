@@ -24,14 +24,14 @@ const input_test =
 pub fn findXmas(x: usize, y: usize, dir: Dir, matrix: ds.Matrix(u8)) usize {
     var found: usize = 0;
 
-    if (dir.up and matrix.get(x, y - 1) == 'M' and matrix.get(x, y - 2) == 'A' and matrix.get(x, y - 3) == 'S') found += 1;
-    if (dir.down and matrix.get(x, y + 1) == 'M' and matrix.get(x, y + 2) == 'A' and matrix.get(x, y + 3) == 'S') found += 1;
-    if (dir.left and matrix.get(x - 1, y) == 'M' and matrix.get(x - 2, y) == 'A' and matrix.get(x - 3, y) == 'S') found += 1;
-    if (dir.right and matrix.get(x + 1, y) == 'M' and matrix.get(x + 2, y) == 'A' and matrix.get(x + 3, y) == 'S') found += 1;
-    if (dir.up and dir.right and matrix.get(x + 1, y - 1) == 'M' and matrix.get(x + 2, y - 2) == 'A' and matrix.get(x + 3, y - 3) == 'S') found += 1;
-    if (dir.up and dir.left and matrix.get(x - 1, y - 1) == 'M' and matrix.get(x - 2, y - 2) == 'A' and matrix.get(x - 3, y - 3) == 'S') found += 1;
-    if (dir.down and dir.right and matrix.get(x + 1, y + 1) == 'M' and matrix.get(x + 2, y + 2) == 'A' and matrix.get(x + 3, y + 3) == 'S') found += 1;
-    if (dir.down and dir.left and matrix.get(x - 1, y + 1) == 'M' and matrix.get(x - 2, y + 2) == 'A' and matrix.get(x - 3, y + 3) == 'S') found += 1;
+    if (dir.up and matrix.getXY(x, y - 1) == 'M' and matrix.getXY(x, y - 2) == 'A' and matrix.getXY(x, y - 3) == 'S') found += 1;
+    if (dir.down and matrix.getXY(x, y + 1) == 'M' and matrix.getXY(x, y + 2) == 'A' and matrix.getXY(x, y + 3) == 'S') found += 1;
+    if (dir.left and matrix.getXY(x - 1, y) == 'M' and matrix.getXY(x - 2, y) == 'A' and matrix.getXY(x - 3, y) == 'S') found += 1;
+    if (dir.right and matrix.getXY(x + 1, y) == 'M' and matrix.getXY(x + 2, y) == 'A' and matrix.getXY(x + 3, y) == 'S') found += 1;
+    if (dir.up and dir.right and matrix.getXY(x + 1, y - 1) == 'M' and matrix.getXY(x + 2, y - 2) == 'A' and matrix.getXY(x + 3, y - 3) == 'S') found += 1;
+    if (dir.up and dir.left and matrix.getXY(x - 1, y - 1) == 'M' and matrix.getXY(x - 2, y - 2) == 'A' and matrix.getXY(x - 3, y - 3) == 'S') found += 1;
+    if (dir.down and dir.right and matrix.getXY(x + 1, y + 1) == 'M' and matrix.getXY(x + 2, y + 2) == 'A' and matrix.getXY(x + 3, y + 3) == 'S') found += 1;
+    if (dir.down and dir.left and matrix.getXY(x - 1, y + 1) == 'M' and matrix.getXY(x - 2, y + 2) == 'A' and matrix.getXY(x - 3, y + 3) == 'S') found += 1;
 
     return found;
 }
@@ -59,7 +59,7 @@ pub fn main() !void {
             if (x >= 3) dir_ok.left = true;
             if (x + 3 <= matrix.width - 1) dir_ok.right = true;
 
-            const loc = matrix.get(x, y);
+            const loc = matrix.getXY(x, y);
             if (loc == 'X') {
                 acc += findXmas(x, y, dir_ok, matrix);
             }

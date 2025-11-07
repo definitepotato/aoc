@@ -25,11 +25,11 @@ pub fn findXmas(x: usize, y: usize, dir: Dir, matrix: ds.Matrix(u8)) usize {
     var found: usize = 0;
 
     if (dir.up and dir.down and dir.left and dir.right) {
-        const up_left = matrix.get(x - 1, y - 1);
-        const down_right = matrix.get(x + 1, y + 1);
+        const up_left = matrix.getXY(x - 1, y - 1);
+        const down_right = matrix.getXY(x + 1, y + 1);
 
-        const up_right = matrix.get(x + 1, y - 1);
-        const down_left = matrix.get(x - 1, y + 1);
+        const up_right = matrix.getXY(x + 1, y - 1);
+        const down_left = matrix.getXY(x - 1, y + 1);
 
         if (up_left + down_right == 'M' + 'S' and up_right + down_left == 'M' + 'S') found += 1;
     }
@@ -60,7 +60,7 @@ pub fn main() !void {
             if (x >= 1) dir_ok.left = true;
             if (x + 1 <= matrix.width - 1) dir_ok.right = true;
 
-            const loc = matrix.get(x, y);
+            const loc = matrix.getXY(x, y);
             if (loc == 'A') {
                 acc += findXmas(x, y, dir_ok, matrix);
             }

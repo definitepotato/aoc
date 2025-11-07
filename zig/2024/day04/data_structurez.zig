@@ -138,7 +138,7 @@ pub fn Matrix(comptime T: type) type {
             var y: usize = 0;
             while (lines.next()) |line| : (y += 1) {
                 for (line, 0..) |ch, x| {
-                    matrix.set(x, y, ch);
+                    matrix.setXY(x, y, ch);
                 }
             }
 
@@ -168,7 +168,7 @@ pub fn Matrix(comptime T: type) type {
             var y: usize = 0;
             while (lines.next()) |line| : (y += 1) {
                 for (line, 0..) |ch, x| {
-                    matrix.set(x, y, ch);
+                    matrix.setXY(x, y, ch);
                 }
             }
 
@@ -181,12 +181,12 @@ pub fn Matrix(comptime T: type) type {
         }
 
         /// Get the value at coord `x`,`y`.
-        pub fn get(self: *const Self, x: usize, y: usize) T {
+        pub fn getXY(self: *const Self, x: usize, y: usize) T {
             return self.buffer[y * self.width + x];
         }
 
         /// Set `value` at coord `x`,`y`.
-        pub fn set(self: *Self, x: usize, y: usize, value: T) void {
+        pub fn setXY(self: *Self, x: usize, y: usize, value: T) void {
             self.buffer[y * self.width + x] = value;
         }
 
@@ -321,43 +321,67 @@ pub fn Slice(comptime T: type) type {
 
         /// Returns a sliding window iterator with a width of `size`.
         pub fn window(self: *Self, size: usize) SliceWindowIterator {
-            return SliceWindowIterator{ .slice = self, .window_size = size, .window_start = 0 };
+            return SliceWindowIterator{ .slice_ptr = self, .window_size = size, .window_start = 0 };
         }
 
         pub const SliceWindowIterator = struct {
-            slice: *Self,
+            slice_ptr: *Self,
             window_size: usize,
             window_start: usize,
 
             /// Iterates the backing buffer in a sliding window.
             pub fn next(self: *SliceWindowIterator) ?[]T {
                 const window_end = self.window_start + self.window_size;
-                if (window_end > self.slice.len) {
+                if (window_end > self.slice_ptr.len) {
                     return null;
                 }
 
-                const window_slice = self.slice.buffer[self.window_start..window_end];
+                const window_slice = self.slice_ptr.buffer[self.window_start..window_end];
                 self.window_start += 1;
                 return window_slice;
             }
         };
 
         /// Returns an iterator, use `next()` to iterate.
+        pub fn backward(self: *Self) BackwardSliceIterator {
+            return BackwardSliceIterator{ .slice_ptr = self, .index = self.len - 1 };
+        }
+
+        pub const BackwardSliceIterator = struct {
+            slice_ptr: *Self,
+            index: usize,
+            flushed: bool = false,
+
+            /// Iterates the backing buffer backwards item by item.
+            pub fn next(self: *BackwardSliceIterator) ?T {
+                if (self.index == 0) {
+                    if (self.flushed) return null;
+                    self.flushed = true;
+                    return self.slice_ptr.buffer[self.index];
+                }
+
+                const item = self.slice_ptr.buffer[self.index];
+                self.index -= 1;
+                return item;
+            }
+        };
+
+        /// Returns an iterator, use `next()` to iterate.
         pub fn iterator(self: *Self) SliceIterator {
-            return SliceIterator{ .slice = self, .index = 0 };
+            return SliceIterator{ .slice_ptr = self, .index = 0 };
         }
 
         pub const SliceIterator = struct {
-            slice: *Self,
+            slice_ptr: *Self,
             index: usize,
 
             /// Iterates the backing buffer item by item.
             pub fn next(self: *SliceIterator) ?T {
-                if (self.index >= self.slice.len) {
+                if (self.index >= self.slice_ptr.len) {
                     return null;
                 }
 
-                const item = self.slice.buffer[self.index];
+                const item = self.slice_ptr.buffer[self.index];
                 self.index += 1;
                 return item;
             }
