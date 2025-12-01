@@ -34,21 +34,30 @@ pub fn main() void {
     var start = dial;
 
     var part_1: i32 = 0;
+    var part_2: i32 = 0;
 
     var lines = std.mem.tokenizeAny(u8, file_input, "\n");
     while (lines.next()) |line| {
         const instr = processInstruction(line);
 
-        if (instr.dir == 'R') dial += instr.distance;
+        const turns = @divFloor(instr.distance, 100);
+        part_2 += turns;
+
+        if (instr.dir == 'R') {
+            if (dial + @mod(instr.distance, 100) >= 100) part_2 += 1;
+            dial += instr.distance;
+        }
+
         if (instr.dir == 'L') {
+            if (dial > 0 and (dial - @mod(instr.distance, 100)) <= 0) part_2 += 1;
             start = @mod((100 - start), 100);
             dial -= instr.distance;
         }
 
         dial = @mod(dial, 100);
-
         if (dial == 0) part_1 += 1;
     }
 
     print("Part 1: {d}\n", .{part_1});
+    print("Part 2: {d}\n", .{part_2});
 }
