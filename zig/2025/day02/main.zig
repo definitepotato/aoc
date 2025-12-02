@@ -17,8 +17,10 @@ fn isValid(id: u64, memo: *std.AutoHashMap(u64, bool)) bool {
     const right = id_str[half_id_len..];
 
     for (0..half_id_len) |idx| {
-        memo.*.put(id, true) catch unreachable;
-        if (left[idx] != right[idx]) return true;
+        if (left[idx] != right[idx]) {
+            memo.*.put(id, true) catch unreachable;
+            return true;
+        }
     }
 
     memo.*.put(id, false) catch unreachable;
