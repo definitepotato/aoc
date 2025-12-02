@@ -31,39 +31,24 @@ func main() {
 	lines := ReadFile("input.txt")
 
 	dial := 50
-	start := dial
 
 	part1 := 0
-	part2 := 0
+	// part2 := 0
 
 	for _, line := range lines {
-		dir := line[0]
+		dir := -1 // left
+		if line[0] == 'R' {
+			dir = 1
+		}
 		distance, _ := strconv.Atoi(line[1:])
 
-		turns := distance / 100
-		part2 += turns
-
-		if dir == 'R' {
-			if dial+distance%100 >= 100 {
-				part2 += 1
-			}
-			dial += distance
-		}
-
-		if dir == 'L' {
-			if dial > 0 && (dial-distance%100) <= 0 {
-				part2 += 1
-			}
-			start = (100 - start) % 100
-			dial -= distance
-		}
-
-		dial = dial % 100
+		dial += dir * distance
+		dial %= 100
 		if dial == 0 {
 			part1 += 1
 		}
 	}
 
 	fmt.Printf("Part 1: %d\n", part1)
-	fmt.Printf("Part 2: %d\n", part2)
+	// fmt.Printf("Part 2: %d\n", part2)
 }
