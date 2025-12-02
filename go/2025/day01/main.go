@@ -27,13 +27,45 @@ func ReadFile(filename string) []string {
 	return lines
 }
 
-func main() {
+func part2() {
 	lines := ReadFile("input.txt")
-
 	dial := 50
+	start := dial
+	ans := 0
 
-	part1 := 0
-	// part2 := 0
+	for _, line := range lines {
+		dir := -1 // left
+		if line[0] == 'R' {
+			dir = 1
+		}
+		distance, _ := strconv.Atoi(line[1:])
+
+		turns := distance / 100
+		ans += turns
+
+		dial += dir * (distance % 100)
+
+		if start != 0 && (dial < 0 || dial > 100) {
+			ans += 1
+		}
+
+		dial %= 100
+		if dial < 0 {
+			dial += 100
+		}
+
+		if start != 0 && dial == 0 {
+			ans += 1
+		}
+	}
+
+	fmt.Printf("Part 2: %d\n", ans)
+}
+
+func part1() {
+	lines := ReadFile("input.txt")
+	dial := 50
+	ans := 0
 
 	for _, line := range lines {
 		dir := -1 // left
@@ -45,10 +77,14 @@ func main() {
 		dial += dir * distance
 		dial %= 100
 		if dial == 0 {
-			part1 += 1
+			ans += 1
 		}
 	}
 
-	fmt.Printf("Part 1: %d\n", part1)
-	// fmt.Printf("Part 2: %d\n", part2)
+	fmt.Printf("Part 1: %d\n", ans)
+}
+
+func main() {
+	part1()
+	part2()
 }
