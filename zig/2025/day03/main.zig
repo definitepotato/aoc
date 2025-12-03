@@ -14,6 +14,8 @@ const input_file = @embedFile("input.txt");
 //
 // if you subtract '0' it will "convert" from it's u8 byte value to an integer value
 // i.e. '5' - '0' = 53 - 48 = 5
+// const batt1: usize = @intCast(batteries[i] - '0');
+// const batt2: usize = @intCast(batteries[j] - '0');
 
 const test_input =
     \\987654321111111
@@ -22,7 +24,7 @@ const test_input =
     \\818181911112111
 ;
 
-pub fn main() void {
+pub fn solvePart1() void {
     var part1: usize = 0;
     var banks = std.mem.tokenizeAny(u8, input_file, "\n");
     while (banks.next()) |batteries| {
@@ -30,16 +32,20 @@ pub fn main() void {
         for (0..batteries.len) |i| {
             for (i..batteries.len) |j| {
                 if (i == j) continue;
-                // const batt1: usize = @intCast(batteries[i] - '0');
-                // const batt2: usize = @intCast(batteries[j] - '0');
                 const jolt: usize = std.fmt.parseInt(usize, &[2]u8{ batteries[i], batteries[j] }, 10) catch unreachable;
                 if (joltage < jolt) joltage = jolt;
             }
         }
-        print("{s} => {d}\n", .{ batteries, joltage });
         part1 += joltage;
         joltage = 0;
     }
 
     print("Part 1: {d}\n", .{part1});
+}
+
+pub fn solvePart2() void {}
+
+pub fn main() void {
+    solvePart1();
+    solvePart2();
 }
