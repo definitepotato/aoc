@@ -57,9 +57,9 @@ pub fn solvePart2() void {
             }
         }
         const clean_up = mess.toOwned() catch unreachable;
-        if (clean_up) |roll| {
-            for (roll) |r| {
-                grid.setXY(r[0], r[1], '.');
+        if (clean_up) |rolls| {
+            for (rolls) |roll| {
+                grid.setXY(roll[0], roll[1], '.');
             }
         }
         if (rolls_removed == 0) break;
