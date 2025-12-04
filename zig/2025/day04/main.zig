@@ -39,14 +39,14 @@ pub fn solvePart2() void {
 
                 var acc: usize = 0;
                 if (grid.getXY(x, y) == '@') {
-                    if (down and grid.getXY(x, y + 1) == '@') acc += 1; // down
-                    if (left_down and grid.getXY(x - 1, y + 1) == '@') acc += 1; // left, down
-                    if (left and grid.getXY(x - 1, y) == '@') acc += 1; // left
-                    if (left_up and grid.getXY(x - 1, y - 1) == '@') acc += 1; // left, up
-                    if (up and grid.getXY(x, y - 1) == '@') acc += 1; // up
-                    if (right_up and grid.getXY(x + 1, y - 1) == '@') acc += 1; // right, up
-                    if (right and grid.getXY(x + 1, y) == '@') acc += 1; // right
-                    if (right_down and grid.getXY(x + 1, y + 1) == '@') acc += 1; // right,down
+                    if (down and grid.getXY(x, y + 1) == '@') acc += 1;
+                    if (left_down and grid.getXY(x - 1, y + 1) == '@') acc += 1;
+                    if (left and grid.getXY(x - 1, y) == '@') acc += 1;
+                    if (left_up and grid.getXY(x - 1, y - 1) == '@') acc += 1;
+                    if (up and grid.getXY(x, y - 1) == '@') acc += 1;
+                    if (right_up and grid.getXY(x + 1, y - 1) == '@') acc += 1;
+                    if (right and grid.getXY(x + 1, y) == '@') acc += 1;
+                    if (right_down and grid.getXY(x + 1, y + 1) == '@') acc += 1;
 
                     if (acc < 4) {
                         rolls_removed += 1;
@@ -86,14 +86,14 @@ pub fn solvePart1() void {
 
             var acc: usize = 0;
             if (grid.getXY(x, y) == '@') {
-                if (down and grid.getXY(x, y + 1) == '@') acc += 1; // down
-                if (left_down and grid.getXY(x - 1, y + 1) == '@') acc += 1; // left, down
-                if (left and grid.getXY(x - 1, y) == '@') acc += 1; // left
-                if (left_up and grid.getXY(x - 1, y - 1) == '@') acc += 1; // left, up
-                if (up and grid.getXY(x, y - 1) == '@') acc += 1; // up
-                if (right_up and grid.getXY(x + 1, y - 1) == '@') acc += 1; // right, up
-                if (right and grid.getXY(x + 1, y) == '@') acc += 1; // right
-                if (right_down and grid.getXY(x + 1, y + 1) == '@') acc += 1; // right,down
+                if (down and grid.getXY(x, y + 1) == '@') acc += 1;
+                if (left_down and grid.getXY(x - 1, y + 1) == '@') acc += 1;
+                if (left and grid.getXY(x - 1, y) == '@') acc += 1;
+                if (left_up and grid.getXY(x - 1, y - 1) == '@') acc += 1;
+                if (up and grid.getXY(x, y - 1) == '@') acc += 1;
+                if (right_up and grid.getXY(x + 1, y - 1) == '@') acc += 1;
+                if (right and grid.getXY(x + 1, y) == '@') acc += 1;
+                if (right_down and grid.getXY(x + 1, y + 1) == '@') acc += 1;
 
                 if (acc < 4) {
                     part1 += 1;
