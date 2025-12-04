@@ -21,7 +21,7 @@ const test_input =
 
 pub fn solvePart2() void {
     var part2: usize = 0;
-    var score: usize = 0;
+    var rolls_removed: usize = 0;
 
     var mess = ds.Slice([2]usize).init(allocator);
     var grid = ds.Matrix(u8).initFromText(allocator, input_file) catch unreachable;
@@ -49,7 +49,7 @@ pub fn solvePart2() void {
                     if (right_down and grid.getXY(x + 1, y + 1) == '@') acc += 1; // right,down
 
                     if (acc < 4) {
-                        score += 1;
+                        rolls_removed += 1;
                         part2 += 1;
                         mess.append([2]usize{ x, y }) catch unreachable;
                     }
@@ -62,8 +62,8 @@ pub fn solvePart2() void {
                 grid.setXY(r[0], r[1], '.');
             }
         }
-        if (score == 0) break;
-        score = 0;
+        if (rolls_removed == 0) break;
+        rolls_removed = 0;
     }
 
     print("Part 2: {d}\n", .{part2});
