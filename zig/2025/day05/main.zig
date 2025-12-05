@@ -37,42 +37,28 @@ fn buildDB(in: []const u8) std.ArrayList([2]usize) {
 }
 
 fn lessThan(_: void, lhs: [2]usize, rhs: [2]usize) bool {
-    // Sort primarily by the first element (index 0)
-    if (lhs[0] != rhs[0]) {
-        return lhs[0] < rhs[0];
-    }
-    // If the first elements are equal, sort by the second element (index 1) as a tie-breaker
-    return lhs[1] < rhs[1];
+    return lhs[0] < rhs[0];
 }
 
 pub fn solvePart2(in: std.ArrayList([2]usize)) usize {
-    var db = in;
+    const db = in;
     std.sort.block([2]usize, db.items, {}, lessThan);
-    // print("{any}\n", .{db.items});
     var ans: u64 = 0;
 
-    for (db.items, 0..) |_, i| {
-        for (db.items, 0..) |_, idx| {
-            // if (db.items[i][1] + 1 > db.items[i][0] - 1) continue;
-
-            if (db.items[idx][0] > db.items[i][0] and db.items[idx][0] < db.items[i][1]) {
-                db.items[idx][0] = db.items[i][1] + 1;
-            }
-
-            if (db.items[idx][1] < db.items[i][1] and db.items[idx][1] > db.items[i][0]) {
-                db.items[idx][1] = db.items[i][0] - 1;
-            }
+    // instead of nesting loops, keep a pointer to the db
+    // handy and reference by idx
+    var ptr_db = db.items.ptr;
+    for (db.items) |*range| {
+        if (ptr_db[0][1] < range[0]) {
+            ans += ptr_db[0][1] - ptr_db[0][0] + 1;
+            ptr_db += 1;
+            ptr_db[0] = range.*;
+        } else if (ptr_db[0][1] < range[1]) {
+            ptr_db[0][1] = range[1];
         }
     }
 
-    // print("{any}\n", .{db.items});
-
-    for (db.items) |range| {
-        if (range[0] > range[1]) continue;
-        ans += (range[1] - range[0]) + 1;
-    }
-
-    // 361100454171408 <- too high
+    ans += ptr_db[0][1] - ptr_db[0][0] + 1;
     return ans;
 }
 
