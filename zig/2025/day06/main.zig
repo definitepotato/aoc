@@ -39,25 +39,22 @@ pub fn main() void {
         var idx: usize = 0;
         while (it_item.next()) |n_or_sym| : (idx += 1) {
             if (n_or_sym[0] == '+' or n_or_sym[0] == '*') continue;
-            const n = std.fmt.parseInt(u64, n_or_sym, 10) catch unreachable;
 
-            if (operators[idx] == '+') {
-                ans[idx] += n;
-            }
+            const n = std.fmt.parseInt(u64, n_or_sym, 10) catch unreachable;
+            if (operators[idx] == '+') ans[idx] += n;
 
             if (operators[idx] == '*') {
-                if (ans[idx] == 0) {
-                    ans[idx] = n;
-                } else {
+                if (ans[idx] > 0) {
                     ans[idx] *= n;
+                    continue;
                 }
+
+                ans[idx] = n;
             }
         }
     }
 
-    for (ans) |a| {
-        part1 += a;
-    }
+    for (ans) |a| part1 += a;
 
     print("Part 1: {d}\n", .{part1});
     arena.deinit();
