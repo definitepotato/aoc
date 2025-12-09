@@ -207,6 +207,28 @@ pub fn Matrix(comptime T: type) type {
                 try stdout.print("\n", .{});
             }
         }
+
+        /// Returns a newly allocated matrix rotated 90 degrees clockwise.
+        pub fn rotate(self: Self) !Self {
+            const new_width = self.height;
+            const new_height = self.width;
+
+            var rotated = try Matrix(T).init(self.allocator, new_width, new_height);
+
+            for (0..self.height) |y| {
+                for (0..self.width) |x| {
+                    const value = self.getXY(x, y);
+
+                    // Map (x, y) → (new_x, new_y)
+                    const new_x = y;
+                    const new_y = (new_height - 1) - x;
+
+                    rotated.setXY(new_x, new_y, value);
+                }
+            }
+
+            return rotated;
+        }
     };
 }
 

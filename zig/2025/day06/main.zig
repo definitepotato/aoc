@@ -27,6 +27,67 @@ pub fn lastLine(in: []const u8) ?[]const u8 {
     return slice.toOwned() catch unreachable;
 }
 
+pub fn stoi(s: []const u8) usize {
+    const my_s = s;
+    const s_cleaned = std.mem.trim(u8, my_s, " ");
+    return std.fmt.parseInt(u64, s_cleaned[0..], 10) catch unreachable;
+}
+
+pub fn solvePart2() void {
+    var part2: u64 = 0;
+    var ans: [2056 * 2]u64 = @splat(0);
+    part2 += 0;
+
+    var grid = ds.Matrix(u8).initFromText(allocator, input_file) catch unreachable;
+    const new_grid = grid.rotate() catch unreachable;
+
+    const num_size: usize = 4;
+    var y: usize = 0;
+    var idx: usize = 0;
+    var bucket: [4]u64 = @splat(0);
+    while (y < new_grid.height) : (y += 1) {
+        if (new_grid.getXY(num_size, y) == '+') {
+            const val = [num_size]u8{ new_grid.getXY(0, y), new_grid.getXY(1, y), new_grid.getXY(2, y), new_grid.getXY(3, y) };
+            const val_i = stoi(&val);
+            bucket[idx] = val_i;
+            var new: u64 = 0;
+            for (bucket) |a| {
+                new += a;
+            }
+            ans[y] = new;
+
+            y += 1;
+            idx = 0;
+            bucket = @splat(0);
+            continue;
+        }
+        if (new_grid.getXY(num_size, y) == '*') {
+            const val = [num_size]u8{ new_grid.getXY(0, y), new_grid.getXY(1, y), new_grid.getXY(2, y), new_grid.getXY(3, y) };
+            const val_i = stoi(&val);
+            bucket[idx] = val_i;
+            if (ans[y] == 0) ans[y] = 1;
+            var new: u64 = 1;
+            for (bucket) |a| {
+                if (a == 0) continue;
+                new *= a;
+            }
+            ans[y] = new;
+
+            y += 1;
+            idx = 0;
+            bucket = @splat(0);
+            continue;
+        }
+        const val = [num_size]u8{ new_grid.getXY(0, y), new_grid.getXY(1, y), new_grid.getXY(2, y), new_grid.getXY(3, y) };
+        const val_i = stoi(&val);
+        bucket[idx] = val_i;
+        idx += 1;
+    }
+
+    for (ans) |a| part2 += a;
+    print("Part 2: {d}\n", .{part2});
+}
+
 pub fn main() void {
     var part1: u64 = 0;
     const operators = lastLine(input_file).?;
@@ -57,5 +118,17 @@ pub fn main() void {
     for (ans) |a| part1 += a;
 
     print("Part 1: {d}\n", .{part1});
+    solvePart2();
     arena.deinit();
+}
+
+test "rotate" {
+    var grid = try ds.Matrix(u8).initFromText(allocator, test_input);
+    const new_grid = try grid.rotate();
+
+    const val = [3]u8{ new_grid.getXY(0, 0), new_grid.getXY(1, 0), new_grid.getXY(2, 0) };
+    const val_cleaned = std.mem.trim(u8, &val, " ");
+
+    const val_i = std.fmt.parseInt(usize, val_cleaned[0..], 10) catch unreachable;
+    assert(val_i == 4);
 }
