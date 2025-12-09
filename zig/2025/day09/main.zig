@@ -51,6 +51,6 @@ pub fn main() void {
         }
     }
 
-    print("{d}\n", .{max});
+    print("Part 1: {d}\n", .{max});
     arena.deinit();
 }
